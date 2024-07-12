@@ -26,6 +26,13 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
           fetch-depth: 0
       # Bのリポジトリに対する変更をコミット
+      - name: Create a new file
+        run: |
+          echo "Update generated at $(date)" > update-info.txt
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add update-info.txt
+          git commit -m "Automated update: $(date)"
       - name: Create Pull Request to B's repo
         uses: peter-evans/create-pull-request@v3
         with:
