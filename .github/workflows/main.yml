@@ -6,38 +6,47 @@ jobs:
   create_pull_request:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout A's repo
+      - name: Global Git Configuration
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+      
+      - name: Checkout makePR's repo
         uses: actions/checkout@v3
         with:
-          repository: "nogson/makePR"
+          repository: "hogehoge/makePR"
           fetch-depth: 0
           ref: main
-      # 他の必要なステップ（例：変更の実行）
+      
       - name: Generate github token for GitHub App
         id: generate_token
         uses: tibdex/github-app-token@v2
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
-      - name: Checkout B's repo
+      
+      - name: Checkout takePR's repo
         uses: actions/checkout@v3
         with:
-          repository: "nogson/takePR"
+          repository: "hogehoge/takePR"
           token: ${{ steps.generate_token.outputs.token }}
           fetch-depth: 0
-      # Bのリポジトリに対する変更をコミット
-      - name: Create a new file
+      
+      - name: Prepare Update Info
+        id: prep
+        run: echo "UPDATE_INFO=Update generated at $(date)" >> $GITHUB_ENV
+      
+      - name: Commit Update Info to takePR's repo
         run: |
-          echo "Update generated at $(date)" > update-info.txt
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          echo "${{ env.UPDATE_INFO }}" > update-info.txt
           git add update-info.txt
-          git commit -m "Automated update: $(date)"
-      - name: Create Pull Request to B's repo
+          git commit -m "${{ env.UPDATE_INFO }}"
+      
+      - name: Create Pull Request to takePR's repo
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ steps.generate_token.outputs.token }}
-          commit-message: "Update from A"
-          title: "Update from A"
+          commit-message: "Update from makePR"
+          title: "Update from makePR"
           body: "This is an automated PR to update content"
-          branch: "update-from-A"
+          branch: "update-from-makePR"
