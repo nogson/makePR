@@ -1,39 +1,36 @@
-name: Create Pull Request to Another Repository
+name: makePR
 
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
 
 jobs:
-  create-pull-request:
+  create_pull_request:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the target repository
+      - name: Checkout A's repo
         uses: actions/checkout@v3
         with:
-          repository: 'nogson/takePR'
-          token: ${{ secrets.TARGET_REPO_TOKEN }}
-          path: 'another-repo'
-
-      - name: Create a new branch
-        run: |
-          cd another-repo
-          git checkout -b new-feature-branch
-          # ここでファイルに変更を加える
-          git config user.email "your-email@example.com"
-          git config user.name "Your Name"
-          git add .
-          git commit -m "Add new feature"
-          git push origin new-feature-branch
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+          repository: "nogson/makePR"
+          fetch-depth: 0
+          ref: main
+      # 他の必要なステップ（例：変更の実行）
+      - name: Generate github token for GitHub App
+        id: generate_token
+        uses: tibdex/github-app-token@v2
         with:
-          token: ${{ secrets.TARGET_REPO_TOKEN }}
-          path: another-repo
-          branch: new-feature-branch
-          base: main # プルリクエストを作成する先のブランチ
-          title: "Add new feature"
-          body: "This PR adds a new feature."
-          draft: false
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+      - name: Checkout B's repo
+        uses: actions/checkout@v3
+        with:
+          repository: "nogson/takePR"
+          token: ${{ steps.generate_token.outputs.token }}
+          fetch-depth: 0
+      # Bのリポジトリに対する変更をコミット
+      - name: Create Pull Request to B's repo
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          commit-message: "Update from A"
+          title: "Update from A"
+          body: "This is an automated PR to update content"
+          branch: "update-from-A"
