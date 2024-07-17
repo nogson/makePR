@@ -52,3 +52,5 @@ jobs:
           title: "Update from makePR"
           body: "This is an automated PR to update content"
           branch: "update-from-makePR"
+          path: "takePR"
+
