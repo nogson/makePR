@@ -45,7 +45,7 @@ jobs:
         run: cp -R ./update-info.txt takePR/     
       
       - name: Create Pull Request to takePR's repo
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ steps.generate_token.outputs.token }}
           commit-message: "Update from makePR"
