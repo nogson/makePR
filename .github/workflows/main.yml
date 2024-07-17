@@ -42,7 +42,7 @@ jobs:
           path: "takePR"
           
       - name: Copy updated variables to takePR's repo
-        run: cp -R ./* takePR/     
+        run: cp -R ./ takePR/     
       
       - name: Create Pull Request to takePR's repo
         uses: peter-evans/create-pull-request@v3
