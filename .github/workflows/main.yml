@@ -24,14 +24,7 @@ jobs:
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
-      
-      - name: Checkout takePR's repo
-        uses: actions/checkout@v3
-        with:
-          repository: "nogson/takePR"
-          token: ${{ steps.generate_token.outputs.token }}
-          fetch-depth: 0
-      
+
       - name: Prepare Update Info
         id: prep
         run: echo "UPDATE_INFO=Update generated at $(date)" >> $GITHUB_ENV
@@ -39,8 +32,17 @@ jobs:
       - name: Commit Update Info to takePR's repo
         run: |
           echo "${{ env.UPDATE_INFO }}" > update-info.txt
-          git add update-info.txt
-          git commit -m "${{ env.UPDATE_INFO }}"
+      
+      - name: Checkout takePR's repo
+        uses: actions/checkout@v3
+        with:
+          repository: "nogson/takePR"
+          token: ${{ steps.generate_token.outputs.token }}
+          fetch-depth: 0
+          path: "takePR"
+          
+      - name: Copy updated variables to takePR's repo
+        run: cp -R ./* takePR/     
       
       - name: Create Pull Request to takePR's repo
         uses: peter-evans/create-pull-request@v3
