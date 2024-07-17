@@ -17,7 +17,13 @@ jobs:
           repository: "nogson/makePR"
           fetch-depth: 0
           ref: main
-      
+          path: "makePR"
+          
+      - name: List contents of makePR's repo
+        run: |
+          echo "Listing contents of makePR's repo:"
+          ls -la makePR/ 
+          
       - name: Generate github token for GitHub App
         id: generate_token
         uses: tibdex/github-app-token@v2
@@ -40,6 +46,11 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
           fetch-depth: 0
           path: "takePR"
+          
+      - name: List contents of takePR's repo
+        run: |
+          echo "Listing contents of takePR's repo:"
+          ls -la takePR/
           
       - name: Copy updated variables to takePR's repo
         run: cp -R ./update-info.txt takePR/     
