@@ -16,8 +16,14 @@ jobs:
         with:
           repository: "nogson/makePR"
           fetch-depth: 0
-          ref: main
-          path: "makePR"
+
+      - name: Checkout takePR's repo
+        uses: actions/checkout@v3
+        with:
+          repository: "nogson/takePR"
+          token: ${{ steps.generate_token.outputs.token }}
+          fetch-depth: 0
+          path: "takePR"          
           
       - name: Generate github token for GitHub App
         id: generate_token
@@ -25,35 +31,14 @@ jobs:
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
-
-      - name: Prepare Update Info
-        id: prep
-        run: echo "UPDATE_INFO=Update generated at $(date)" >> $GITHUB_ENV
       
       - name: Commit Update Info to makePR's repo
         run: |
-          echo "${{ env.UPDATE_INFO }}" > makePR/update-info.txt
-          
-      - name: Checkout takePR's repo
-        uses: actions/checkout@v3
-        with:
-          repository: "nogson/takePR"
-          token: ${{ steps.generate_token.outputs.token }}
-          fetch-depth: 0
-          path: "takePR"
+          echo "UPDATE_INFO=Update generated at $(date)" > makePR/update-info.txt
         
       - name: Copy updated variables to takePR's repo
         run: |
-          cp makePR/update-info.txt takePR/
-      
-      - name: Commit changes to takePR's repo
-        run: |
-          cd takePR
-          git config user.email "action@github.com"
-          git config user.name "GitHub Action"
-          git add update-info.txt
-          git commit -m "Update info from makePR" || echo "No changes to commit"
-          git push
+          cp update-info.txt takePR/
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
