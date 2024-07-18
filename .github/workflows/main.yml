@@ -19,11 +19,6 @@ jobs:
           ref: main
           path: "makePR"
           
-      - name: List contents of makePR's repo
-        run: |
-          echo "Listing contents of makePR's repo:"
-          ls -la makePR/ 
-          
       - name: Generate github token for GitHub App
         id: generate_token
         uses: tibdex/github-app-token@v2
@@ -38,7 +33,8 @@ jobs:
       - name: Commit Update Info to takePR's repo
         run: |
           echo "${{ env.UPDATE_INFO }}" > update-info.txt
-      
+          
+     
       - name: Checkout takePR's repo
         uses: actions/checkout@v3
         with:
@@ -46,11 +42,7 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
           fetch-depth: 0
           path: "takePR"
-          
-      - name: List contents of takePR's repo
-        run: |
-          echo "Listing contents of takePR's repo:"
-          ls -la takePR/
+        
           
       - name: Copy updated variables to takePR's repo
         run: cp -R ./update-info.txt takePR/     
@@ -65,3 +57,12 @@ jobs:
           branch: "update-from-makePR"
           path: "takePR"
 
+      - name: List contents of makePR's repo
+        run: |
+          echo "Listing contents of makePR's repo:"
+          ls -la makePR/  
+
+      - name: List contents of takePR's repo
+        run: |
+          echo "Listing contents of takePR's repo:"
+          ls -la takePR/          
