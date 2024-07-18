@@ -45,7 +45,14 @@ jobs:
         
           
       - name: Copy updated variables to takePR's repo
-        run: cp -R makePR/update-info.txt takePR/     
+        run: cp -R makePR/update-info.txt takePR/
+
+      - name: Commit changes to takePR's repo
+        run: |
+          cd takePR
+          git add .
+          git commit -m "Update info from makePR"
+        working-directory: takePR    
       
       - name: Create Pull Request to takePR's repo
         uses: peter-evans/create-pull-request@v6
