@@ -10,7 +10,14 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-      
+          
+      - name: Generate github token for GitHub App
+        id: generate_token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }} 
+          
       - name: Checkout makePR's repo
         uses: actions/checkout@v3
         with:
@@ -24,13 +31,6 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
           fetch-depth: 0
           path: "takePR"          
-          
-      - name: Generate github token for GitHub App
-        id: generate_token
-        uses: tibdex/github-app-token@v2
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
       
       - name: Commit Update Info to makePR's repo
         run: |
