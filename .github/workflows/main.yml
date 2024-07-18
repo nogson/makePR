@@ -34,7 +34,7 @@ jobs:
       
       - name: Commit Update Info to makePR's repo
         run: |
-          echo "UPDATE_INFO=Update generated at $(date)" > makePR/update-info.txt
+          echo "UPDATE_INFO=Update generated at $(date)" > update-info.txt
         
       - name: Copy updated variables to takePR's repo
         run: |
