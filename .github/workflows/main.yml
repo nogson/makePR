@@ -46,30 +46,25 @@ jobs:
           
       - name: Copy updated variables to takePR's repo
         run: cp -R makePR/update-info.txt takePR/
-
+      
       - name: Commit changes to takePR's repo
         run: |
           cd takePR
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
           git add .
-          git commit -m "Update info from makePR"
-        working-directory: takePR    
+          git commit -m "Update info from makePR" || echo "No changes to commit"
+          git push
+        working-directory: takePR
       
       - name: Create Pull Request to takePR's repo
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ steps.generate_token.outputs.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Update from makePR"
           title: "Update from makePR"
           body: "This is an automated PR to update content"
           branch: "update-from-makePR"
+          base: "main"
           path: "takePR"
-
-      - name: List contents of makePR's repo
-        run: |
-          echo "Listing contents of makePR's repo:"
-          ls -la makePR/  
-
-      - name: List contents of takePR's repo
-        run: |
-          echo "Listing contents of takePR's repo:"
-          ls -la takePR/          
+       
