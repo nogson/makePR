@@ -62,7 +62,7 @@ jobs:
           commit-message: "Update from makePR"
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          branch: feat/update-variables
+          branch: feat/abc
           branch-suffix: timestamp
           delete-branch: true
           title: "Update from makePR"
