@@ -45,7 +45,7 @@ jobs:
         
           
       - name: Copy updated variables to takePR's repo
-        run: cp -R ./update-info.txt takePR/     
+        run: cp -R makePR/update-info.txt takePR/     
       
       - name: Create Pull Request to takePR's repo
         uses: peter-evans/create-pull-request@v6
