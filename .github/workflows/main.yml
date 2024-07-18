@@ -47,7 +47,7 @@ jobs:
       - name: Copy updated variables to takePR's repo
         run: |
           cp -R makePR/update-info.txt takePR/
-          echo ls -la takePR/
+          ls -la takePR/
       
       - name: Commit changes to takePR's repo
         run: |
