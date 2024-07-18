@@ -55,13 +55,16 @@ jobs:
           git commit -m "Update info from makePR" || echo "No changes to commit"
           git push
 
-      - name: Create Pull Request to takePR's repo
+      - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ steps.generate_token.outputs.token }}
           commit-message: "Update from makePR"
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          branch: feat/update-variables
+          branch-suffix: timestamp
+          delete-branch: true
           title: "Update from makePR"
-          body: "This is an automated PR to update content"
-          branch: "update-from-makePR"
-          base: "main"
+          body: Variables has been updated
           path: "takePR"
