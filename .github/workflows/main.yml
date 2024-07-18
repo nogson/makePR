@@ -32,7 +32,7 @@ jobs:
       
       - name: Commit Update Info to takePR's repo
         run: |
-          echo "${{ env.UPDATE_INFO }}" > update-info.txt
+          echo "${{ env.UPDATE_INFO }}" > makePR/update-info.txt
           
      
       - name: Checkout takePR's repo
