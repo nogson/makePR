@@ -49,7 +49,6 @@ jobs:
       
       - name: Commit changes to takePR's repo
         run: |
-          cd takePR
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
           git add .
