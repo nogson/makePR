@@ -30,7 +30,7 @@ jobs:
         id: prep
         run: echo "UPDATE_INFO=Update generated at $(date)" >> $GITHUB_ENV
       
-      - name: Commit Update Info to takePR's repo
+      - name: Commit Update Info to makePR's repo
         run: |
           echo "${{ env.UPDATE_INFO }}" > makePR/update-info.txt
           
@@ -45,7 +45,7 @@ jobs:
       - name: Copy updated variables to takePR's repo
         run: |
           cp makePR/update-info.txt takePR/
-          ls -la takePR
+          cat takePR/update-info.txt
       
       - name: Commit changes to takePR's repo
         run: |
